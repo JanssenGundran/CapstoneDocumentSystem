@@ -1,0 +1,47 @@
+<div class="page-container">
+  <div class="bg-image"></div>
+
+  <main class="content-wrapper">
+    <div class="branding">
+      <h1 class="city-name">ANGELES CITY</h1>
+      <img src="assets/images/angeles_city_logo.png" alt="Angeles City Seal" class="logo">
+      <h2 class="form-title">CREATE YOUR ACCOUNT NOW</h2>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="signup-card">
+      <h3 class="signup-header">SIGN UP</h3>
+
+      <div class="form-grid">
+        <!-- Email -->
+        <div class="input-group">
+          <input type="email" formControlName="email" placeholder="EMAIL">
+        </div>
+
+        <!-- Password -->
+        <div class="input-group input-with-icon">
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="PASSWORD">
+          <span class="password-toggle" (click)="togglePassword()">
+            <i [class]="showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+          </span>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="input-group input-with-icon">
+          <input [type]="showConfirmPassword ? 'text' : 'password'" formControlName="confirmPassword" placeholder="CONFIRM PASSWORD">
+          <span class="password-toggle" (click)="toggleConfirmPassword()">
+            <i [class]="showConfirmPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'"></i>
+          </span>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="register-btn" [disabled]="registerForm.invalid || loading">
+          {{ loading ? 'Registering...' : 'REGISTER' }}
+        </button>
+        <p class="login-link">
+          Already have an account? <a (click)="goToLogin()">Log in</a>
+        </p>
+      </div>
+    </form>
+  </main>
+</div>

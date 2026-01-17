@@ -1,0 +1,222 @@
+.login-bg {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/angeles_city_bg.png'); /* Replace with your image */
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px); /* Adjust blur amount here */
+  transform: scale(1.1); /* Prevents white edges from the blur */
+  z-index: -1;
+}
+
+.city-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #050505;;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+  }
+
+  .welcome-text {
+    font-size: 32px;
+    font-weight: 700;
+    color: #050505;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+     text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+  }
+
+
+/* Logo at the top */
+.logo {
+    width: 250px;
+    margin-bottom: 1px;
+}
+
+/* Header text */
+.header p {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #000;
+    margin-bottom: 30px;
+
+}
+
+/* Center container */
+.login-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Red login card - Fixed width and centering */
+.login-box {
+    background: #f44336;
+    width: 100%; /* Better for responsiveness */
+    max-width: 400px; /* Keeps it the size you wanted */
+    padding: 30px 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+/* Form layout */
+.form-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* LOGIN title */
+.login-title {
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+
+}
+
+/* Input wrapper */
+.input-with-icon {
+    position: relative;
+    width: 100%;
+    max-width: 400px; /* Match your login box width */
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+}
+/* Inputs */
+.input-with-icon input {
+    width: 100%;
+    padding: 12px 45px 12px 16px; /* Extra right padding (45px) for the eye */
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    background: #ffd6d1;
+    box-sizing: border-box;
+}
+
+.input-with-icon input:focus {
+    border: 2px solid #f44336;
+    box-shadow: 0 0 5px rgba(244, 67, 54, 0.5);
+}
+
+/* Icons inside input */
+.input-with-icon .icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+    cursor: pointer;
+    font-size: 20px;
+
+}
+
+/* Positioning the Eye Icon */
+.password-toggle {
+    position: absolute;
+    right: 15px; /* Distance from the right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #555; /* Muted color for the icon */
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+    z-index: 2; /* Ensure it stays above the input */
+}
+
+.password-toggle:hover {
+    color: #f44336; /* Changes to red when you hover */
+}
+
+/* Error messages */
+.error small {
+    color: #2b0000;
+    font-size: 23px;
+}
+
+/* Form Options - Center the links to match the button */
+.form-options {
+    width: 100%;
+    text-align: center; /* Changed from left to center */
+    margin-bottom: 20px;
+}
+
+.form-options a {
+    font-size: 20px;
+    color: #ffd6d1;
+    text-decoration: none;
+}
+
+.form-options a:hover {
+    text-decoration: underline;
+}
+
+/* Login button */
+.login-btn {
+    background: #ffb3ab;
+    color: #000;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 30px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 15px;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: #ff8c75;
+}
+
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Register text */
+.register-text {
+    font-size: 20px;
+    color: #ffd6d1;
+    text-align: center;
+}
+
+.register-text a {
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 3px;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
