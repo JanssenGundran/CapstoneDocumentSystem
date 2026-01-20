@@ -20,7 +20,9 @@
     "@angular/router": "^18.2.0",
     "@emailjs/browser": "^4.4.1",
     "@emailjs/nodejs": "^5.0.2",
+    "@sendgrid/mail": "^8.1.6",
     "axios": "^1.12.2",
+    "bcrypt": "^6.0.0",
     "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
@@ -31,9 +33,10 @@
     "jspdf": "^3.0.2",
     "mysql2": "^3.14.3",
     "ng2-pdf-viewer": "^10.4.0",
-    "nodemailer": "^7.0.6",
+    "nodemailer": "^7.0.12",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "twilio": "^5.11.2",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {

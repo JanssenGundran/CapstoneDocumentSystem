@@ -17,21 +17,31 @@ export class LoginComponent {
   loading: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {
-    // Initialize form
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
-    });
+  private fb: FormBuilder,
+  private router: Router,
+  private authService: AuthService
+) {
+  // Initialize form
+  this.loginForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required]
+  });
 
-    // Redirect if already logged in
-    if (localStorage.getItem('token')) {
+  // Redirect if already logged in
+  const storedUser = localStorage.getItem('user');
+  if (storedUser) {
+    const user = JSON.parse(storedUser);
+    if (user.role === 1) {
+      this.router.navigate(['/admin']);
+    } else if (user.role === 3 && !user.detailsCompleted) {
+      this.router.navigate(['/edit-profile']);
+    } else {
       this.router.navigate(['/']);
     }
   }
+}
+
+
 
   // Form getters for template convenience
   public get email() {
@@ -48,34 +58,47 @@ export class LoginComponent {
   }
 
   // Login submission
-  onSubmit(): void {
-    if (!this.loginForm.valid) {
-      alert('Please enter valid email and password.');
-      return;
-    }
-
-    this.loading = true;
-
-    this.authService.login(this.loginForm.value).subscribe({
-      next: (res) => {
-        console.log('Login successful:', res);
-
-        // Store token and user info in localStorage for persistent login
-        if (res.token) localStorage.setItem('token', res.token);
-        if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
-
-        alert(res.message || 'Login successful!');
-        this.router.navigate(['/']);
-      },
-      error: (err) => {
-        console.error('Login failed:', err);
-        alert(err.message || 'Wrong email or password.');
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+onSubmit(): void {
+  if (!this.loginForm.valid) {
+    alert('Please enter valid email and password.');
+    return;
   }
+
+  this.loading = true;
+
+  this.authService.login(this.loginForm.value).subscribe({
+    next: (res: any) => {
+      console.log('Login successful:', res);
+
+      // Store token and user info
+      if (res.token) localStorage.setItem('token', res.token);
+      if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
+
+      alert(res.message || 'Login successful!');
+
+      // Redirect based on role and detailsCompleted
+      if (res.user?.role === 1) {
+        // Admin → go to admin dashboard
+        this.router.navigate(['/admin']);
+      } else if (res.user?.role === 3 && !res.user.detailsCompleted) {
+        // Normal user without details → redirect to fill-up page
+        this.router.navigate(['/edit-profile']);
+      } else {
+        // All other users or role 3 with details → home page
+        this.router.navigate(['/']);
+      }
+    },
+    error: (err) => {
+      console.error('Login failed:', err);
+      alert(err.error?.message || 'Wrong email or password.');
+    },
+    complete: () => {
+      this.loading = false;
+    }
+  });
+}
+
+
 
   // Parallax effect for background
   @HostListener('document:mousemove', ['$event'])

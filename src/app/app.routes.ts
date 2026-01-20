@@ -5,7 +5,7 @@ import { CertificateDownloadComponent } from './certficate-download/certficate-d
 import { RegisterComponent } from './register/register.component';
 import { EmpYearComponent } from './certificate_types/emp-year/emp-year.component';
 import { AccountComponent } from './account/account.component';
-import { AttendanceComponent } from './certificate_types/attendance/attendance.component'; 
+import { AttendanceComponent } from './certificate_types/attendance/attendance.component';
 import { PeerAwardComponent } from './certificate_types/peer-award/peer-award.component';
 import { VibesAwardComponent } from './certificate_types/vibes-award/vibes-award.component';
 import { PunctualityComponent } from './certificate_types/punctuality/punctuality.component';
@@ -24,6 +24,9 @@ import { CosSalaryComponent } from './certificate_types/cos-salary/cos-salary.co
 import { CompanyDocsComponent } from './company-docs/company-docs.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CoeComponent } from './certificate_types/coe/coe.component';
+import { AdminComponent } from './admin/admin.component';
+import { OtpVerificationComponent } from './otpverify/otpverify.component'
+import { EditProfileComponent } from './edit-profile/edit-profile.component';
 
 export const routes: Routes = [
     { path: 'certificates', component: CertificateComponent },
@@ -34,6 +37,7 @@ export const routes: Routes = [
     },
     { path: 'approved', component: CertificateDownloadComponent },
     { path: 'register', component: RegisterComponent },
+    { path: 'otpverify', component: OtpVerificationComponent },
     { path: 'downloads', component: CertificateDownloadComponent },
     { path: 'empyear', component: EmpYearComponent },
     { path: 'account-settings', component: AccountComponent },
@@ -51,10 +55,12 @@ export const routes: Routes = [
     { path: 'intern-coc', component: InternCocComponent },
     { path: 'account', component: AccountComponent },
     { path: 'pending', component: PendingComponent },
-    { path: 'intern-certs', component: InternsCertComponent},
-    { path: 'best-projects', component: BestOjtComponent},
-    { path: 'cos-salary', component: CosSalaryComponent},
-    { path: 'company-documents', component: CompanyDocsComponent},
+    { path: 'intern-certs', component: InternsCertComponent },
+    { path: 'best-projects', component: BestOjtComponent },
+    { path: 'cos-salary', component: CosSalaryComponent },
+    { path: 'company-documents', component: CompanyDocsComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
-    { path: 'coe-with-salary',component: CoeComponent}
+    { path: 'coe-with-salary', component: CoeComponent },
+    { path: 'admin', component: AdminComponent },
+    { path: 'edit-profile', component: EditProfileComponent }
 ];

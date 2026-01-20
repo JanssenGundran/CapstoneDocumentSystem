@@ -5,9 +5,12 @@ import { catchError } from 'rxjs/operators';
 
 export interface User {
   id?: number;
-  email: string;
+  contact?: string;
+  phone?: string;
   password: string;
+  role: number;
 }
+
 
 export interface AuthResponse {
   message: string;
@@ -24,14 +27,19 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  register(data: { email: string; password: string }): Observable<AuthResponse> {
+    verifyOtp(data: { email?: string; phone?: string; otp: string }): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/verify-otp`, data)
+      .pipe(catchError(this.handleError));
+  }
+
+  register(data: { contact: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data)
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  login(data: { email: string; password: string }): Observable<AuthResponse> {
+  login(data: { contact: string; password: string }): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.apiUrl}/login`, data)
       .pipe(
         catchError(this.handleError)
@@ -46,3 +54,4 @@ export class AuthService {
     return throwError(() => new Error(errorMsg));
   }
 }
+

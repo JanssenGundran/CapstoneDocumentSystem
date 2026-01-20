@@ -24,46 +24,43 @@ export class RegisterComponent {
   ) {
     // Initialize form with only the required fields
     this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
+      contact: ['', [Validators.required]],
       password: ['', Validators.required],
       confirmPassword: ['', Validators.required]
     });
   }
 
   onSubmit() {
-    if (!this.registerForm.valid) {
-      alert('Please fill in all required fields correctly.');
-      return;
-    }
-
-    const { email, password, confirmPassword } = this.registerForm.value;
-
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!');
-      return;
-    }
-
-    this.loading = true;
-
-    // Call backend register method
-    this.authService.register({ email, password }).subscribe({
-      next: (res) => {
-        console.log('Registration successful:', res);
-        alert('Registration successful!');
-        this.router.navigate(['/login']).catch(err => {
-          console.error('Navigation error:', err);
-          alert('Unable to navigate to login page.');
-        });
-      },
-      error: (err) => {
-        console.error('Registration error:', err);
-        alert(err.error?.message || 'Registration failed');
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+  if (!this.registerForm.valid) {
+    alert('Please fill in all required fields correctly.');
+    return;
   }
+
+  const { contact, password, confirmPassword } = this.registerForm.value;
+
+  if (password !== confirmPassword) {
+    alert('Passwords do not match!');
+    return;
+  }
+
+  this.loading = true;
+
+  // Call backend register method
+  this.authService.register({ contact, password }).subscribe({
+    next: (res) => {
+      console.log('Registration successful:', res);
+      // Instead of alert + login, navigate to OTP verification page
+      this.router.navigate(['/otpverify'], { state: { contact } });
+    },
+    error: (err) => {
+      console.error('Registration error:', err);
+      alert(err.error?.message || 'Registration failed');
+    },
+    complete: () => {
+      this.loading = false;
+    }
+  });
+}
 
     goToLogin(): void {
     this.router.navigate(['/login']);
