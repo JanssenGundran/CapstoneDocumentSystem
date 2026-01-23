@@ -28,6 +28,7 @@ import { AdminComponent } from './admin/admin.component';
 import { OtpVerificationComponent } from './otpverify/otpverify.component'
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
 import { HomeStaffComponent } from './home-staff/home-staff.component';
+import { RequestDetailComponent } from './request-detail/request-detail.component';
 
 export const routes: Routes = [
     { path: 'certificates', component: CertificateComponent },
@@ -42,6 +43,7 @@ export const routes: Routes = [
     { path: 'downloads', component: CertificateDownloadComponent },
     { path: 'empyear', component: EmpYearComponent },
     { path: 'account-settings', component: AccountComponent },
+    { path: 'request-detail/:id', component: RequestDetailComponent },
     { path: 'attendance', component: AttendanceComponent },
     { path: 'peer-award', component: PeerAwardComponent },
     { path: 'vibes-award', component: VibesAwardComponent },

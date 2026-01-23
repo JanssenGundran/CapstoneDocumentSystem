@@ -39,102 +39,82 @@
   </h3>
 </div>
 
+<!-- DOCUMENT REQUESTS -->
 <div class="overflow-x-auto rounded-lg shadow-md">
   <table class="min-w-full bg-white rounded-lg text-gray-800 text-sm">
     <thead class="bg-green-200 text-green-900">
       <tr>
         <th class="py-3 px-4 text-left font-semibold">Name</th>
         <th class="py-3 px-4 text-left font-semibold">Requested At</th>
+        <th class="py-3 px-4 text-left font-semibold">Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let doc of documentRequests.slice(0, 5)" class="border-b hover:bg-green-50 transition">
+      <tr *ngFor="let doc of documentRequests" class="border-b hover:bg-green-50 transition cursor-pointer"
+          (click)="viewRequestDetail(doc)">
         <td class="py-3 px-4">{{ doc.name }}</td>
         <td class="py-3 px-4">{{ doc.date_created | date:'medium' }}</td>
+        <td class="py-3 px-4 capitalize">{{ doc.status }}</td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<div class="flex justify-end">
-  <a [routerLink]="'/document-requests'">
-    <img src="images/more.png" alt="icon" class="h-6 mt-4">
-  </a>
+
+<!-- IN PROCESS TABLE -->
+<div class="overflow-x-auto rounded-lg shadow-md mt-8">
+  <h3 class="text-2xl font-bold mb-4">In Process</h3>
+  <table class="min-w-full bg-white rounded-lg text-gray-800 text-sm">
+    <thead class="bg-yellow-200 text-yellow-900">
+      <tr>
+        <th class="py-3 px-4 text-left font-semibold">Recipient</th>
+        <th class="py-3 px-4 text-left font-semibold">Requested At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of inProcess" class="border-b hover:bg-yellow-50 transition cursor-pointer"
+          (click)="viewInProcessDetail(doc)">
+        <td class="py-3 px-4">{{ doc.name }}</td>
+        <td class="py-3 px-4">{{ doc.updated_at | date:'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
+<!-- PROCESSED TABLE -->
+<div class="overflow-x-auto rounded-lg shadow-md mt-8">
+  <h3 class="text-2xl font-bold mb-4">Processed</h3>
+  <table class="min-w-full bg-white rounded-lg text-gray-800 text-sm">
+    <thead class="bg-blue-200 text-blue-900">
+      <tr>
+        <th class="py-3 px-4 text-left font-semibold">Recipient</th>
+        <th class="py-3 px-4 text-left font-semibold">Processed At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of processed" class="border-b hover:bg-blue-50 transition">
+        <td class="py-3 px-4">{{ doc.name }}</td>
+        <td class="py-3 px-4">{{ doc.updated_at | date:'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-  <!-- Pending Table -->
-  <div class="mb-8">
-    <h3 class="text-3xl font-bold text-blue-800 flex items-center gap-2 mb-8">
-      <i class="fa-solid fa-hourglass-half"></i>
-      PENDING FOR APPROVAL
-    </h3>
-  </div>
-  <div class="overflow-x-auto rounded-lg shadow-md">
-    <table class="min-w-full bg-white rounded-lg text-gray-800 text-sm">
-      <thead class="bg-yellow-200 text-yellow-900">
-        <tr>
-          <th class="py-3 px-4 text-left font-semibold">Recipient</th>
-          <th class="py-3 px-4 text-left font-semibold">Creator</th>
-          <th class="py-3 px-4 text-left font-semibold">Signatory 1</th>
-          <th class="py-3 px-4 text-left font-semibold">Signatory 2</th>
-          <th class="py-3 px-4 text-left font-semibold">Issue Date</th>
-          <th class="py-3 px-4 text-left font-semibold">Status</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr *ngFor="let cert of pendingCertificates.slice(0, 5)" class="border-b hover:bg-yellow-50 transition">
-          <td class="py-3 px-4">{{ cert.rname }}</td>
-          <td class="py-3 px-4">{{ cert.creator_name }}</td>
-          <td class="py-3 px-4">{{ cert.signatory1_name }}</td>
-          <td class="py-3 px-4">{{ cert.signatory2_name }}</td>
-          <td class="py-3 px-4">{{ cert.issue_date }}</td>
-          <td class="py-3 px-4 capitalize">{{ cert.status }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="flex justify-end">
-    <a [routerLink]="'/pending'">
-      <img src="images/more.png" alt="icon" class="h-6 mt-4">
-    </a>
-  </div>
-
-  <!-- Approved Table -->
-  <div>
-    <h3 class="text-3xl font-bold text-blue-800 flex items-center gap-2 mb-8">
-      <i class="fa-solid fa-square-check"></i>
-      APPROVED CERTIFICATES
-    </h3>
-  </div>
-
-    <div class="overflow-x-auto rounded-lg shadow-md">
-      <table class="min-w-full bg-white rounded-lg text-gray-800 text-sm">
-        <thead class="bg-blue-200 text-blue-900">
-          <tr>
-            <th class="py-3 px-4 text-left font-semibold">Recipient</th>
-            <th class="py-2 px-2 text-left font-semibold">Creator</th>
-            <th class="py-3 px-4 text-left font-semibold">Certificate</th>
-            <th class="py-3 px-4 text-left font-semibold">Status</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr *ngFor="let cert of certificates.slice(0, 5)" class="border-b hover:bg-blue-50 transition">
-            <td class="py-3 px-4">{{ cert.name }}</td>
-            <td class="py-3 px-4">{{ cert.creator }}</td>
-            <td class="py-3 px-4">{{ cert.certificateType }}</td>
-            <td class="py-3 px-4">{{ cert.status }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="flex justify-end">
-      <a [routerLink]="'/downloads'">
-        <img src="images/more.png" alt="icon" class="h-6 mt-4">
-      </a>
-    </div>
-</body>
+<!-- DENIED TABLE -->
+<div class="overflow-x-auto rounded-lg shadow-md mt-8">
+  <h3 class="text-2xl font-bold mb-4">Denied</h3>
+  <table class="min-w-full bg-white rounded-lg text-gray-800 text-sm">
+    <thead class="bg-red-200 text-red-900">
+      <tr>
+        <th class="py-3 px-4 text-left font-semibold">Recipient</th>
+        <th class="py-3 px-4 text-left font-semibold">Denied At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of denied" class="border-b hover:bg-red-50 transition">
+        <td class="py-3 px-4">{{ doc.name }}</td>
+        <td class="py-3 px-4">{{ doc.updated_at | date:'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

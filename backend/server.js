@@ -15,6 +15,7 @@
   const sgMail = require('@sendgrid/mail');
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+
   function sendOtpEmail(to, otp) {
     const msg = {
       to,
@@ -25,6 +26,8 @@
 
     return sgMail.send(msg);
   }
+
+
 
 
   const app = express();
@@ -70,6 +73,10 @@
       streamifier.createReadStream(fileBuffer).pipe(stream);
     });
   }
+
+
+// Serve the uploads folder statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
   function verifyToken(req, res, next) {
     const token = req.headers['authorization']?.split(' ')[1];
@@ -743,7 +750,11 @@ app.delete('/api/admin/users/:id', verifyToken, checkRole(1), (req, res) => {
 
 // Get all document requests
 app.get('/api/document_request', (req, res) => {
-  const sql = 'SELECT RequestID, name, date_created FROM document_request ORDER BY date_created DESC';
+  const sql = `
+    SELECT RequestID, name, date_created, status, updated_at
+    FROM document_request
+    ORDER BY date_created DESC
+  `;
   db.query(sql, (err, results) => {
     if (err) {
       console.error('Failed to fetch document requests:', err);
@@ -752,14 +763,69 @@ app.get('/api/document_request', (req, res) => {
     res.json(results);
   });
 });
+// Get a single document request by ID
+app.get('/api/document_request/:id', verifyToken, (req, res) => {
+  const requestId = parseInt(req.params.id, 10);
+
+  const sql = `
+    SELECT dr.RequestID, dr.name, dr.date_created, dr.status, dr.updated_at,
+           dr.file_path,      -- ADD THIS LINE
+           u.email,
+           CONCAT(ud.User_FName, ' ', ud.User_LName) AS full_name
+    FROM document_request dr
+    LEFT JOIN users u ON dr.user_id = u.id
+    LEFT JOIN user_details ud ON u.id = ud.UserID
+    WHERE dr.RequestID = ?
+  `;
+
+  db.query(sql, [requestId], (err, results) => {
+    if (err) {
+      console.error('Failed to fetch document request:', err);
+      return res.status(500).json({ error: 'Failed to fetch document request' });
+    }
+
+    if (results.length === 0) return res.status(404).json({ error: 'Document request not found' });
+
+    res.json(results[0]);
+  });
+});
+
+
+
+// Mark request as "In Process"
+app.post('/api/document_request/:id/process', (req, res) => {
+  const requestId = req.params.id;
+
+  const sql = 'UPDATE document_request SET status = ?, updated_at = NOW() WHERE RequestID = ?';
+  db.query(sql, ['in_process', requestId], (err, result) => {
+    if (err) return res.status(500).json({ message: 'Failed to process request', error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'Request not found' });
+    res.json({ message: 'Request marked as In Process' });
+  });
+});
+
+// Mark request as "Denied"
+app.post('/api/document_request/:id/deny', (req, res) => {
+  const requestId = req.params.id;
+
+  const sql = 'UPDATE document_request SET status = ?, updated_at = NOW() WHERE RequestID = ?';
+  db.query(sql, ['denied', requestId], (err, result) => {
+    if (err) return res.status(500).json({ message: 'Failed to deny request', error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'Request not found' });
+    res.json({ message: 'Request marked as Denied' });
+  });
+});
+
+
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
 // Use multer memory storage for upload
 const uploadDoc = multer({ storage: multer.memoryStorage() });
 
-app.post('/api/document_request', uploadDoc.single('file'), (req, res) => {
+app.post('/api/document_request', verifyToken, uploadDoc.single('file'), (req, res) => {
   const { name } = req.body;
+  const userId = req.user.id; // get user_id from JWT
 
   if (!name) return res.status(400).json({ error: 'Name is required' });
 
@@ -781,8 +847,8 @@ app.post('/api/document_request', uploadDoc.single('file'), (req, res) => {
     }
   }
 
-  const sql = 'INSERT INTO document_request (name, file_path) VALUES (?, ?)';
-  db.query(sql, [name, filePath], (err, result) => {
+  const sql = 'INSERT INTO document_request (name, file_path, user_id) VALUES (?, ?, ?)';
+  db.query(sql, [name, filePath, userId], (err, result) => {
     if (err) {
       console.error('Database error:', err);
       return res.status(500).json({ error: 'Database insert failed' });
